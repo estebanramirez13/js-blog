@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Async Concepts</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Understanding JavaScript Asynchronous Programming</h1>
+    </header>
+
+    <main>
+        <!-- Async -->
+        <section>
+            <h2>1. JavaScript Async</h2>
+            <p>Asynchronous programming in JavaScript allows functions to execute in the background without affecting the main thread of execution. This is essential for web development to prevent the browser from becoming unresponsive during operations such as reading a file or retrieving data from a server..</p>
+            <p>JavaScript pushes tasks to the background and executes the next line of code without waiting for the current code to complete. This allows JavaScript to perform multiple tasks simultaneously, improving the user experience.</p>
+            <pre><code>function fetchData() {
+    setTimeout(() => {
+        console.log("Data fetched after 2 seconds");
+    }, 2000);
+}
+fetchData(); // Executes after a delay, but doesn't block the main flow
+console.log("Other code runs while data is being fetched");</code></pre>
+        </section>
+
+        <!-- Callback -->
+        <section>
+            <h2>2. Callback</h2>
+            <p>A callback is a function that is run after an action is finished and supplied as a parameter to another function. This is a typical JavaScript pattern, particularly in asynchronous programs where you have to make sure that a particular activity (like getting data) is finished before proceeding to the next step.</p>
+            <p>But using callbacks excessively can result in "callback hell," where handling layered callbacks becomes challenging. Async/await and promises are intended to address this issue.</p>
+            <pre><code>function doSomething(callback) {
+    console.log("Doing something...");
+    callback();
+}
+
+function finished() {
+    console.log("Task finished successfully");
+}
+
+doSomething(finished); // The callback function runs after 'doSomething'</code></pre>
+        </section>
+
+        <!-- Promise -->
+        <section>
+            <h2>3. Promise</h2>
+            <p>An object that symbolizes the eventual success (or failure) of an asynchronous operation is called a Promise. It provides a more organized way to manage asynchronous processes than callbacks and eliminates the need for deep code.</p>
+            <p>A Promise can have one of three states: <strong>Pending</strong> (indicating that the operation has not yet completed), <strong>Resolved</strong> (indicating that the operation succeeded), or <strong>Rejected</strong> (indicating that the operation did not succeed). When handling the result of a Promise, use the <code>.then()</code> method in case of success or the <code>.catch()</code> method in case of problems.</p>
+            <pre><code>let promise = new Promise((resolve, reject) => {
+    let success = true; // You can toggle this to test the rejection
+    if (success) {
+        resolve("Operation successful");
+    } else {
+        reject("Operation failed");
+    }
+});
+
+promise
+    .then(result => console.log(result)) // Logs success message
+    .catch(error => console.error(error)); // Catches any errors</code></pre>
+        </section>
+
+        <!-- Async/Await -->
+        <section>
+            <h2>4. Async/Await</h2>
+            <p>Async/Await is syntactic sugar built on top of Promises, allowing us to write asynchronous code in a more readable, synchronous style. It simplifies promise chains, making the code easier to follow, especially for complex sequences of async operations.</p>
+            <p>The <strong>async</strong> keyword is used to define a function that returns a Promise, while <strong>await</strong> is used to pause the execution of the function until the Promise resolves or rejects.</p>
+            <pre><code>async function fetchData() {
+    let result = await new Promise((resolve) => 
+        setTimeout(() => resolve("Data fetched after 2 seconds"), 2000)
+    );
+    console.log(result); // Execution waits here until the Promise resolves
+}
+
+fetchData();</code></pre>
+        </section>
+
+        <!-- Event Loop -->
+        <section>
+            <h2>5. Event Loop</h2>
+            <p>The Event Loop is one of the core concepts of JavaScript's runtime environment. It is responsible for executing the code, collecting and processing events, and executing queued tasks (such as callbacks). JavaScript is single-threaded, meaning it can only perform one task at a time, but the Event Loop allows it to manage multiple asynchronous operations by scheduling them for later execution when the call stack is clear.</p>
+            <p>When JavaScript code runs, the call stack handles function execution. If there's an asynchronous task, it is pushed to the task queue. The Event Loop constantly checks whether the call stack is empty and moves the next task from the queue to the call stack.</p>
+            <pre><code>console.log("Start");
+
+setTimeout(() => {
+    console.log("Timeout callback executed");
+}, 0);
+
+console.log("End"); // 'End' gets logged before the callback, even though it's set to 0ms</code></pre>
+            <p>In the example above, even though the timeout is set to 0 milliseconds, the "End" message is printed before the callback because the event loop ensures the call stack is clear before executing asynchronous callbacks.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 JavaScript Async Blog</p>
+    </footer>
+</body>
+</html>
